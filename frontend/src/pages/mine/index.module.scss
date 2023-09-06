@@ -1,0 +1,20 @@
+/* 修改选中的 Tab 字体颜色 */
+
+.customNav :global(.ant-tabs-tab-active) {
+  padding: 6px 0;
+}
+.customNav :global(.ant-tabs-tab) {
+  padding: 6px 0;
+  font-weight: bold;
+}
+.customNav :global(.ant-tabs-nav-wrap) {
+  position: fixed !important;
+  z-index: 99;
+  background: black;
+  width: 100%;
+  @apply top-20;
+}
+
+.customNav :global(.ant-tabs-nav::before) {
+  border: none;
+}

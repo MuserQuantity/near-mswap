@@ -1,0 +1,11 @@
+FROM node:20
+
+ENV NODE_ENV=production
+
+WORKDIR /code
+
+COPY .next/standalone /code
+
+EXPOSE 3000
+
+CMD node server.js

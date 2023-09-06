@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: metaswapdapp
+  name: metaswapdapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metaswapdapp
+  template:
+    metadata:
+      labels:
+        app: metaswapdapp
+    spec:
+      containers:
+        - image: metaswapdappserver
+          name: metaswapdappserver
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+        - image: metaswapdapp
+          name: metaswapdapp
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx
+              subPath: nginx.conf
+      volumes:
+        - name: nginx
+          configMap:
+            name: metaswapdapp-configmap
+            items:
+              - key: nginx_conf
+                path: nginx.conf

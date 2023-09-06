@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metaswapdapp-configmap
+data:
+  nginx_conf: |-
+    #user  nobody;
+    worker_processes  1;
+    events {
+        worker_connections  1024;
+    }
+    http {
+        include       mime.types;
+        client_max_body_size 50M;
+        default_type  application/octet-stream;
+        sendfile        on;
+        keepalive_timeout  65;
+        upstream appapi {
+            server 10.252.92.17:35588;
+        }
+
+        server {
+            listen       80;
+            server_name  localhost;
+            location /nginx_status {
+                    stub_status on;
+                    access_log off;
+            }
+            location ~ ^/favicon\.ico$ {
+                root   /usr/share/nginx/html;
+            }
+            location /v1 {
+                proxy_pass  http://appapi/v1;
+                proxy_set_header  X-Real-IP  $remote_addr;
+                proxy_set_header Host $host;
+            }
+            # 匹配前端路由url，将请求转发至SSR服务器
+            location / {
+                 proxy_pass http://localhost:3000;
+            }
+            location /_next/static/ {
+    		     alias /usr/share/nginx/html/static/;
+    	    }
+
+        }
+    }

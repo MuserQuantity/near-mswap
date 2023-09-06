@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- namespace.yaml
+- configmap.yaml
+- deployment.yaml
+- service.yaml
+images:
+- name: metaswapdapp
+  newName: 10.252.78.12/metaswap/metaswapdapp
+  newTag: 1.0.0-ae9226ab
+- name: metaswapdappserver
+  newName: 10.252.78.12/metaswap/metaswapdapp
+  newTag: 1.0.0-ae9226ab-server
